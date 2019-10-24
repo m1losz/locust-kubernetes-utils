@@ -22,6 +22,7 @@ Locust cluster manifest generator
 optional arguments:
   -h, --help            show this help message and exit
   -n NAME, --name NAME  Name of the test cluster artifacts
+  -ns NAMESPACE, --namespace NAMESPACE to run in
   -t TARGET_HOST, --target_host TARGET_HOST
                         Target host to run tests against
   -r REPO, --repo REPO  Github repository containing the tests

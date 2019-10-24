@@ -2,6 +2,7 @@ apiVersion: "apps/v1"
 kind: Deployment
 metadata:
   name: {name}-locust-master
+  namespace: {namespace}
   labels:
     app: {name}-locust-master
 spec:
@@ -20,10 +21,14 @@ spec:
       - image: viniciusccarvalho/locust
         name: locust-container
         env:
+          - name: env
+            value: {env}
+          - name: router
+            value: ({services}) #space separated
           - name: LOCUST_MODE
             value: master
           - name: LOCUSTFILE_PATH
-            value: "/data/tests/{test_file}"
+            value: "/data/{test_file}"
           - name: TARGET_URL
             value: {target_host}
         ports:
@@ -40,16 +45,34 @@ spec:
         - name: workdir
           mountPath: "/data/"
       initContainers:
-      - name: gitbox
-        image: viniciusccarvalho/alpine-git
-        command:
-        - git
-        - clone
-        - "{repo}"
-        - "/data/tests"
+      - name: git-sync
+        image: k8s.gcr.io/git-sync:v3.1.2
+        imagePullPolicy: Always
         volumeMounts:
         - name: workdir
-          mountPath: "/data/"
+          mountPath: /data
+        - name: git-config
+          mountPath: /etc/ssh
+        - name: git-secret
+          mountPath: /etc/git-secret
+        args:
+           - "-ssh"
+           - "-repo={repo}"
+           - "-root=/data"
+           - "-branch={branch}"
+           - "-depth=1"
+           - "-one-time"
+           - "-ssh-known-hosts=false" # for dev purpuses only, attach true SCM known hosts in production
+        securityContext:
+          runAsUser: 0
       volumes:
+      - name: git-config
+        secret:
+          defaultMode: 288 # = mode 0440
+          secretName: {name}-git-config # your-ssh-key
+      - name: git-secret
+        secret:
+          defaultMode: 256 # = mode 0400
+          secretName: {name}-git-creds # your-ssh-key
       - name: workdir
         emptyDir: {{}}
