@@ -1,5 +1,3 @@
-kubectl create secret generic git-creds  --from-file=ssh=$HOME/.ssh/id_ecdsa  --from-file=known_hosts=/tmp/known_hosts
-
 1. Generate manifests files
 ```
 python3 locust-deploy.py -n sfportal \

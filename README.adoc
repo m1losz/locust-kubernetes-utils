@@ -14,7 +14,8 @@ Assuming you install all dependencies with `pip install -r requirements.txt`
 
 ```
 python locust-deploy.py -h
-usage: locust-deploy.py [-h] -n NAME -t TARGET_HOST -r REPO -f TEST_FILE
+usage: locust-deploy.py [-h] -n NAME -t TARGET_HOST -r REPO [-b BRANCH] -f
+                        TEST_FILE [-ns NAMESPACE] [-e ENV] [-S SERVICES]
                         [-s SIZE] [-o OUTPUT]
 
 Locust cluster manifest generator
@@ -22,16 +23,23 @@ Locust cluster manifest generator
 optional arguments:
   -h, --help            show this help message and exit
   -n NAME, --name NAME  Name of the test cluster artifacts
-  -ns NAMESPACE, --namespace NAMESPACE to run in
   -t TARGET_HOST, --target_host TARGET_HOST
                         Target host to run tests against
   -r REPO, --repo REPO  Github repository containing the tests
+  -b BRANCH, --branch BRANCH
+                        Github branch containing the tests
   -f TEST_FILE, --test_file TEST_FILE
                         The locust file to be used, relative to the github
                         root path
+  -ns NAMESPACE, --namespace NAMESPACE
+                        Namespace of the test cluster artifacts
+  -e ENV, --env ENV     Test environment
+  -S SERVICES, --services SERVICES
+                        Services to test
   -s SIZE, --size SIZE  Number of workers pods to be created. Default to 1
   -o OUTPUT, --output OUTPUT
                         Manifest files output
+
 ```
 
 So for example if you run:
