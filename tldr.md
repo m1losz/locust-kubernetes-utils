@@ -10,11 +10,13 @@ kubectl -n test create secret generic {TESTER_NAME}-git-creds \
 
 kubectl -n test create secret generic {TESTER_NAME}-git-config \
     --from-file=ssh_config=$HOME/.ssh/config
-
+```
 2. Generate manifests files
 ```
-python3 locust-deploy.py -c values.yml --name {TESTER_NAME} --services {space separated list of services to test against}
 // this will generate k8s manifest files in `--output` directory
+python3 locust-deploy.py -c values.yml
+//or pass in args from command line
+python3 locust-deploy.py -c values.yml --name {TESTER_NAME} --services {space separated list of services to test against}
 ```
 
 3. Spin up 
