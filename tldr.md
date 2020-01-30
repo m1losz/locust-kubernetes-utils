@@ -1,27 +1,21 @@
-1. Generate manifests files
-```
-python3 locust-deploy.py -n sfportal \
-	-r git@github.com:m1losz/CS-Structured-QA-SFPortal-LoadTest \
-	-f CS-Structured-QA-SFPortal-LoadTest/main_task.py \
-	-t http://a197dcbcaa43111e9985606b182dacc2-0e4bd8d2e4f0ba4b.elb.us-west-2.amazonaws.com/ \
-	-s 10 \
-        -S portal_example portal_portfolio 
-```
-
-2. Creating k8s resources
+1. Creating k8s resources (only have to run this once, unless you delete them in k8s)
 ```
 ssh-keyscan $YOUR_GIT_HOST > /tmp/known_hosts
 
 kubectl create namespace test
 
-kubectl -n test create secret generic sfportal-git-creds \
+kubectl -n test create secret generic {TESTER_NAME}-git-creds \
     --from-file=ssh=$HOME/.ssh/id_ecdsa \
     --from-file=known_hosts=/tmp/known_hosts
 
-kubectl -n test create secret generic sfportal-git-config \
+kubectl -n test create secret generic {TESTER_NAME}-git-config \
     --from-file=ssh_config=$HOME/.ssh/config
-```
 
+2. Generate manifests files
+```
+python3 locust-deploy.py -c values.yml --name {TESTER_NAME} --services {space separated list of services to test against}
+// this will generate k8s manifest files in `--output` directory
+```
 
 3. Spin up 
 ```

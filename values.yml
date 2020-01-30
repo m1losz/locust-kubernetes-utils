@@ -1,0 +1,7 @@
+[Defaults]
+name: #tester name
+services: portal_example #space separated list of services to test against
+env: new_dev
+target_host: http://a197dcbcaa43111e9985606b182dacc2-0e4bd8d2e4f0ba4b.elb.us-west-2.amazonaws.com/
+repo: git@github.com:m1losz/CS-Structured-QA-SFPortal-LoadTest
+test_file: CS-Structured-QA-SFPortal-LoadTest/main_task.py
